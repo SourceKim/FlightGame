@@ -1,0 +1,9 @@
+{
+    "type": "sqlite",
+    "database": "./flight_chess.sql",
+    "entities": [
+        "dist/**/**.entity{.ts,.js}"
+    ],
+    "synchronize": true,
+    "logging": true
+}
