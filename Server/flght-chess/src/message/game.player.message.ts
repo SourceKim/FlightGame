@@ -1,7 +1,6 @@
+import { Player } from "src/player/player.model";
+import { Room } from "src/room/room.model";
 import { BaseMessage } from "./base.message";
-
-import { Player } from "src/model/player.model"
-import { Room } from "src/model/room.model"
 
 export enum PlayerCommand {
     READY,

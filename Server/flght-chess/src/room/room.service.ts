@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { ApiErrorCode, ApiException } from "src/foudation/api.exception";
-import { Player } from "src/model/player.model";
-import { Player } from "src/player/player.model";
 import { CreateRoomDto } from "../dto/room.dto";
 import { Room } from "./room.model";
 import { RoomModel } from "../database/database.mongo"
 import { DocumentType } from '@typegoose/typegoose';
 import { model } from "mongoose";
+import { Player } from "src/player/player.model";
 
 @Injectable()
 export class RoomService {

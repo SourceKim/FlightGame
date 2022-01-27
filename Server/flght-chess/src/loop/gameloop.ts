@@ -15,7 +15,7 @@ interface WatingPlayer {
     step: number
 }
 
-export type GameSendMessageHandler = (to: Player, msg: BaseMessage) => void
+export type GameSendMessageHandler = (toPlayer: string, msg: BaseMessage) => void
 
 export class GameLoop {
 
@@ -33,6 +33,7 @@ export class GameLoop {
         room: Room,
         sendMessageHandler: GameSendMessageHandler
     ) {
+        console.log("c")
         this.room = room
         this.fc = new FlightChessGame(
             this._onFlightChessGameError,
@@ -56,7 +57,7 @@ export class GameLoop {
 
     _onFlightChessResult(player: number, chess: number, from: number, to: number) {
         let moveMsg = new GameRoomPlayerMoveMessage()
-        moveMsg.player = this.room.players[player]
+        moveMsg.player = (this.room.players as Player[])[player]
         moveMsg.chess = chess
         moveMsg.from = from
         moveMsg.to = to
@@ -64,6 +65,7 @@ export class GameLoop {
     }
 
     _onGameStart() {
+        console.log("On game start")
         this._broadcastStartMessage()
         this.turnIdx = -1
         this._nextTurn()
@@ -82,7 +84,7 @@ export class GameLoop {
 
     _broadcastStartMessage() {
         let msg = new GameRoomStartMessage()
-        msg.players = this.room.players
+        msg.players = this.room.players as Player[]
         this._broadcastMessage(msg)
     }
 
@@ -129,6 +131,8 @@ export class GameLoop {
 
     _broadcastMessage(msg: GameRoomMessage) {
 
+        console.log(`Broadcast message: ${msg}`)
+
         for (let player of this.room.players) {
             this._sendMessage(player as Player, msg)
         }
@@ -138,7 +142,10 @@ export class GameLoop {
          msg.receiver = to
          msg.sender = this.room
 
+         console.log("send")
+         console.log(to)
          // TODO: do send by socket
+        //  this.sendMessageHandler(to)
      }
 
     onMessageReceive(msg: GamePlayerMessage) {

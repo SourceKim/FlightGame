@@ -5,6 +5,7 @@ import { PlayerService } from 'src/player/player.service';
 import { RoomService } from 'src/room/room.service';
 import { DocumentType } from '@typegoose/typegoose';
 import { Room } from 'src/room/room.model';
+import { Player } from 'src/player/player.model';
 
 @Injectable()
 export class GameService {
@@ -17,7 +18,7 @@ export class GameService {
         @Inject(LoopService) private readonly loopService: LoopService,
     ) {
         loopService.sendMsgHandler = (to, msg) => {
-            this.sendMessage(to.id, msg)
+            this.sendMessage(to, msg)
         }
     }
 
@@ -31,14 +32,16 @@ export class GameService {
         let player = await this.playerService.fetch(userId)
         let room = await this.roomService.fetch(roomId)
 
-        console.log(player)
-        console.log(room)
+        if (room.hasPlayer(player)) {
+            return "User already in room"
+        } else {
+            room.players.push(player)
+            player.room = room
+            room.save()
+            player.save()
+            return "Join success"
+        }
 
-        room.players.push(player)
-        player.room = room
-
-        room.save()
-        return player.save()
     }
 
     async playerReady(userId: string, roomId: string) {
@@ -71,8 +74,8 @@ export class GameService {
     }
 
     async startGame(roomId: string) {
-        let r = await (await this.roomService.fetch(roomId)).toObject()
-        let ply = r.players[0]
+        let r = await this.roomService.fetch(roomId)
+        this.loopService.startGame(r)
         // console.log(ply)
         // console.log(ply.name)
         // console.log(ply.id)

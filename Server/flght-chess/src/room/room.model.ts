@@ -1,4 +1,4 @@
-import { getModelForClass, modelOptions, Prop, Ref } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, Prop, Ref, DocumentType } from "@typegoose/typegoose";
 import { Player } from "src/player/player.model";
 
 @modelOptions({
@@ -18,5 +18,15 @@ export class Room {
         ref: () => Player,
      } )
     players?: Ref<Player>[]
+
+    hasPlayer(player: DocumentType<Player>): boolean {
+        for (let p of this.players as DocumentType<Player>[]) {
+            if (p._id.toString() == player._id.toString()) {
+                return true
+            }
+        }
+        return false
+    }
+
 
 }
