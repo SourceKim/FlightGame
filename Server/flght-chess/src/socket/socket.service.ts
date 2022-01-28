@@ -11,11 +11,12 @@ export class SocketService {
     constructor(
         @Inject(GameService) private readonly gameService: GameService
     ) {
-        gameService.sendMessage = (to, msg) => {
+        gameService.sendMessageHandler = (to, msg) => {
             let client = this.socketMap[to]
-            client.send(msg.toJson())
+            if (client) {
+                client.send(msg.toJson())
+            }
         }
-
     }
 
     onRoomJoined(client: WebSocket, data: JoinRoomDTO) {

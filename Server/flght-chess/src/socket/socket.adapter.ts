@@ -23,8 +23,6 @@ export class SocketAdapter implements WebSocketAdapter {
         handlers: MessageMappingProperties[],
         process: (data: any) => Observable<any>,
     ) {
-        console.log(handlers)
-        console.log('[waAdapter]有新的连接进来')
         fromEvent(client, 'message')
             .pipe(
                 mergeMap(data => this.bindMessageHandler(client, data, handlers, process)),

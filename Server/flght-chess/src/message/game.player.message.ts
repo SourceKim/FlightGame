@@ -1,6 +1,6 @@
 import { Player } from "src/player/player.model";
 import { Room } from "src/room/room.model";
-import { BaseMessage } from "./base.message";
+import { BaseMessage, MessageType } from "./base.message";
 
 export enum PlayerCommand {
     READY,
@@ -9,6 +9,8 @@ export enum PlayerCommand {
 }
 
 export class GamePlayerMessage extends BaseMessage {
+
+    type = MessageType.PLAYER
 
     sender: Player
 

@@ -6,29 +6,29 @@ import { RoomService } from 'src/room/room.service';
 import { DocumentType } from '@typegoose/typegoose';
 import { Room } from 'src/room/room.model';
 import { Player } from 'src/player/player.model';
+import { SendMessageHandler } from 'src/foudation/shared';
 
 @Injectable()
 export class GameService {
-
-    sendMessage: (to: string, msg: BaseMessage) => void
 
     constructor(
         @Inject(RoomService) private readonly roomService: RoomService,
         @Inject(PlayerService) private readonly playerService: PlayerService,
         @Inject(LoopService) private readonly loopService: LoopService,
     ) {
-        loopService.sendMsgHandler = (to, msg) => {
-            this.sendMessage(to, msg)
-        }
+        console.log("GameService construct")
     }
 
     createGameRoom(room: Room) {
 
     }
 
-    async joinRoom(userId: string, roomId: string) {
-        console.log(userId, roomId)
+    set sendMessageHandler(handler: SendMessageHandler) {
+        console.log("Setting send message handler")
+        this.loopService.sendMessageHandler = handler
+    }
 
+    async joinRoom(userId: string, roomId: string) {
         let player = await this.playerService.fetch(userId)
         let room = await this.roomService.fetch(roomId)
 
@@ -75,13 +75,7 @@ export class GameService {
 
     async startGame(roomId: string) {
         let r = await this.roomService.fetch(roomId)
-        this.loopService.startGame(r)
-        // console.log(ply)
-        // console.log(ply.name)
-        // console.log(ply.id)
-        // let room = new Room()
-        // room.id = r.id
-        // room.name = r.name
-        // this.loopService.startGame(room)
+        let room = r.attachDocument(r)
+        this.loopService.startGame(room)
     }
 }

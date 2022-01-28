@@ -4,7 +4,8 @@ import { GameRoomErrorMessage, GameRoomMessage, GameRoomPlayerMoveMessage, GameR
 import { Player } from "src/player/player.model";
 import { Room } from "src/room/room.model";
 import { FlightChessError, FlightChessGame, FlightChessStatus } from "./flightchess";
-
+import { DocumentType } from '@typegoose/typegoose'
+import { SendMessageHandler } from "src/foudation/shared";
 
 enum GameLoopStatus {
 
@@ -14,8 +15,6 @@ interface WatingPlayer {
     player: Player,
     step: number
 }
-
-export type GameSendMessageHandler = (toPlayer: string, msg: BaseMessage) => void
 
 export class GameLoop {
 
@@ -27,13 +26,12 @@ export class GameLoop {
 
     fc: FlightChessGame
 
-    sendMessageHandler: GameSendMessageHandler
+    sendMessageHandler: SendMessageHandler
 
     constructor(
         room: Room,
-        sendMessageHandler: GameSendMessageHandler
+        sendMessageHandler: SendMessageHandler
     ) {
-        console.log("c")
         this.room = room
         this.fc = new FlightChessGame(
             this._onFlightChessGameError,
@@ -128,11 +126,8 @@ export class GameLoop {
         this._nextTurn(step != 6)
     }
 
-
     _broadcastMessage(msg: GameRoomMessage) {
-
         console.log(`Broadcast message: ${msg}`)
-
         for (let player of this.room.players) {
             this._sendMessage(player as Player, msg)
         }
@@ -141,11 +136,8 @@ export class GameLoop {
      _sendMessage(to: Player, msg: GameRoomMessage) {
          msg.receiver = to
          msg.sender = this.room
-
-         console.log("send")
-         console.log(to)
          // TODO: do send by socket
-        //  this.sendMessageHandler(to)
+         this.sendMessageHandler(to.id, msg)
      }
 
     onMessageReceive(msg: GamePlayerMessage) {

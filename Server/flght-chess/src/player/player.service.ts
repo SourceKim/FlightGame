@@ -14,7 +14,6 @@ export class PlayerService {
     }
 
     async regist(dto: CreatePlayerDto) {
-        console.log(dto)
         let player = new Player()
         player.name = dto.name
         return PlayerModel.create(player)

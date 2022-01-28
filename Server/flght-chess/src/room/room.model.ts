@@ -1,5 +1,6 @@
 import { getModelForClass, modelOptions, Prop, Ref, DocumentType } from "@typegoose/typegoose";
 import { Player } from "src/player/player.model";
+import { BaseModel } from "src/models/base.model";
 
 @modelOptions({
     schemaOptions: {
@@ -9,7 +10,7 @@ import { Player } from "src/player/player.model";
         }
     }
 })
-export class Room {
+export class Room extends BaseModel<Room> {
 
     @Prop()
     name: string
@@ -26,6 +27,13 @@ export class Room {
             }
         }
         return false
+    }
+
+    protected afterAttached(): void {
+        for (let p of this.players) {
+            let dp = p as DocumentType<Player>
+            (p as Player).attachDocument(dp)
+        }
     }
 
 

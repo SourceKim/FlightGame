@@ -1,18 +1,20 @@
 import { Player } from "src/player/player.model";
 import { Room } from "src/room/room.model";
-import { BaseMessage } from "./base.message";
+import { BaseMessage, MessageType } from "./base.message";
 
 enum RoomCommand {
-    GAME_START,
-    TURN_CHANGE,
-    PLAYER_ROLL_DICE,
-    PLAYER_MOVE,
-    PLAYER_ARRIVED,
-    PLAYER_WIN,
-    ERROR,
+    GAME_START = 0,
+    TURN_CHANGE = 1,
+    PLAYER_ROLL_DICE = 2,
+    PLAYER_MOVE = 3,
+    PLAYER_ARRIVED = 4,
+    PLAYER_WIN = 5,
+    ERROR = 6,
 }
 
 export class GameRoomMessage extends BaseMessage {
+
+    type = MessageType.ROOM
 
     sender: Room
 

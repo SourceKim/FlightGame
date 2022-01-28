@@ -1,4 +1,12 @@
+export enum MessageType {
+    UNKNOWN = 0,
+    PLAYER = 1,
+    ROOM = 2,
+}
+
 export class BaseMessage {
+
+    type = MessageType.UNKNOWN
     
     id: string
 
