@@ -2,6 +2,7 @@ import { FGLOG } from "./Foundation/Logger"
 import { FGAnimationManager } from "./Manager/AnimationManager"
 import { FGChessboardManager } from "./Manager/ChessboardManager"
 import { FGChessManager } from "./Manager/ChessManager"
+import { FGWebSocket } from "./Socket/socket"
 import { FGView } from "./UI/View"
 
 function start() {
@@ -47,6 +48,11 @@ function start() {
 
 
 }
+
+let ws = new FGWebSocket()
+ws.connect("ws://localhost:3002")
+console.log("connect ws")
+// ws.send("hello")
 
 start()
 
