@@ -11,15 +11,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/ws": "^8.2.2",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "node-sass": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
     "ts-loader": "*",
     "typescript": "^4.5.4",
     "webpack": "*",
     "webpack-cli": "*",
     "webpack-dev-server": "*",
-    "node-sass": "*",
-    "sass-loader": "*",
-    "css-loader": "*",
-    "style-loader": "*",
-    "html-webpack-plugin": "*"
+    "ws": "^8.4.2"
   }
 }

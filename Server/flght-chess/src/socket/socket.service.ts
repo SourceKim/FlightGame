@@ -20,8 +20,8 @@ export class SocketService {
     }
 
     onRoomJoined(client: WebSocket, data: JoinRoomDTO) {
-        this.socketMap[data.userId] = client
-        return this.gameService.joinRoom(data.userId, data.roomId)
+        this.socketMap[data.uid] = client
+        return this.gameService.joinRoom(data.uid, data.roomId)
     }
 
     broadcast(roomId: string, message:string) {

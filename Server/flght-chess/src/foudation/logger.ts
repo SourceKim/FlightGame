@@ -11,7 +11,7 @@ export class KMLogger implements LoggerService {
    * Write a 'log' level log.
    */
   log(message: any, ...optionalParams: any[]) {
-      console.log(`%c[${this.tag}]`, "color:red", ...optionalParams)
+      console.log(`[${this.tag}] ${message}`, ...optionalParams)
   }
 
   /**

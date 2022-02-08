@@ -1,8 +1,10 @@
 import { FGLOG } from "./Foundation/Logger"
+import { FGWebSocket } from "./Foundation/Socket"
 import { FGAnimationManager } from "./Manager/AnimationManager"
 import { FGChessboardManager } from "./Manager/ChessboardManager"
 import { FGChessManager } from "./Manager/ChessManager"
-import { FGWebSocket } from "./Socket/socket"
+import { FGBaseMessage } from "./Message/base.message"
+import { FGMessageEvent, FGMessageHandler } from "./Message/message.handler"
 import { FGView } from "./UI/View"
 
 function start() {
@@ -49,10 +51,17 @@ function start() {
 
 }
 
+
 let ws = new FGWebSocket()
 ws.connect("ws://localhost:3002")
 console.log("connect ws")
-// ws.send("hello")
+
+let msg = new FGBaseMessage()
+msg.uid = "6202a3703a5776a9c038bdb7"
+msg.roomId = "61f2b8ff6d409df5418b806f"
+
+let msgHandler = new FGMessageHandler(ws)
+msgHandler.sendMessage(FGMessageEvent.JOIN_ROOM, msg)
 
 start()
 

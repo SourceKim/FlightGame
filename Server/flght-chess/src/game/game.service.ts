@@ -7,16 +7,19 @@ import { DocumentType } from '@typegoose/typegoose';
 import { Room } from 'src/room/room.model';
 import { Player } from 'src/player/player.model';
 import { SendMessageHandler } from 'src/foudation/shared';
+import { KMLogger } from 'src/foudation/logger';
 
 @Injectable()
 export class GameService {
+
+    private logger = new KMLogger("Game")
 
     constructor(
         @Inject(RoomService) private readonly roomService: RoomService,
         @Inject(PlayerService) private readonly playerService: PlayerService,
         @Inject(LoopService) private readonly loopService: LoopService,
     ) {
-        console.log("GameService construct")
+        this.logger.log("GameService construct")
     }
 
     createGameRoom(room: Room) {
@@ -24,11 +27,11 @@ export class GameService {
     }
 
     set sendMessageHandler(handler: SendMessageHandler) {
-        console.log("Setting send message handler")
         this.loopService.sendMessageHandler = handler
     }
 
     async joinRoom(userId: string, roomId: string) {
+        this.logger.log("User %s is joining to room %s", userId, roomId)
         let player = await this.playerService.fetch(userId)
         let room = await this.roomService.fetch(roomId)
 

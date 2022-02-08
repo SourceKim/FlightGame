@@ -14,7 +14,7 @@ export class GameController {
     @Post('mock_start_game')
     @ApiOperation({ summary: "Mock start a game"})
     async mockStartGame(@Body() body) {
-        return this.gameService.startGame(body.id)
+        return this.gameService.startGame(body)
     }
 
 }

@@ -41,11 +41,17 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         hot: true,
-        port: port
+        port: port,
+        proxy: {
+          '/api': {
+             target: 'ws://[address]:[port]',
+             ws: true
+          },
+        },
     },
     plugins: [
         new HTMLWebpackPlugin({
             template: path.resolve(SRC_PATH, 'index.html')
         })
-    ]
+    ],
   }

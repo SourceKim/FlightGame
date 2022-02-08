@@ -2,6 +2,10 @@ export class FGWebSocket {
 
     ws?: WebSocket
 
+    private pendingData: any[] = []
+
+    public onReceiveMessage?: (msg: any) => void
+
     constructor() {
 
     }
@@ -14,33 +18,46 @@ export class FGWebSocket {
         this.ws.onclose = this.onClose;
     }
 
-    onOpen(event: any): void {
-        console.log(event.target)
+    onOpen = (event: any) => {
+        // console.log(event.target)
         console.log("ii - connected");
 
-        console.log(this.ws)
-        this.ws?.send("hi")
-        event.target.send("{'a': '11'}")
+        // this.ws?.send("hi")
+        // event.target.send("{'a': '11'}")
+        let msgs: any[] = []
+        for (const data of this.pendingData) {
+            msgs.push(this.pendingData.pop())
+        }
+        for (const data of msgs) {
+            this.send(data)
+        }
     }
 
-    onMessage(event: any): void {
+    onMessage = (event: any) => {
+        console.log(event.data)
         console.log(JSON.stringify(event.data));
     
         let str = JSON.parse(event.data.toString());
-    
+
+        this.onReceiveMessage?.call(this, event.data)
     }
 
-    onError(event: any): void {
+    onError = (event: any) => {
         console.log(JSON.stringify(event.data));
         
     }
 
-    onClose(event: any): void {
+    onClose = (event: any) => {
         console.log(JSON.stringify(event.data));
     }
 
     send(data: any) {
-        this.ws?.send(data) 
+        if (this.ws?.readyState == WebSocket.OPEN) {
+            this.ws?.send(data)
+        } else {
+            this.pendingData.push(data)
+        }
+
     }
 
 }
